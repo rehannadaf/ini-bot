@@ -6,7 +6,11 @@ const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://ini-bot-frontend.onrender.com",
+  })
+);
 app.use(express.json());
 
 const ai = new GoogleGenAI({
