@@ -52,8 +52,8 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`INI Bot backend running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`INI Bot backend running on port ${PORT}`);
 });
