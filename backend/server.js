@@ -6,11 +6,15 @@ const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ini-bot.onrender.com"
+];
+
 app.use(
   cors({
-    origin: "https://ini-bot.onrender.com",
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
+    origin: allowedOrigins,
+    credentials: true
   })
 );
 app.use(express.json());

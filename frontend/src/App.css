@@ -129,3 +129,130 @@ button {
 button:disabled {
   opacity: 0.5;
 }
+/* Firebase Authentication */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fb;
+  padding: 20px;
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.auth-logo {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111827;
+  color: white;
+  border-radius: 16px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.auth-box h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+
+.auth-subtitle {
+  color: #6b7280;
+  margin-bottom: 28px;
+}
+
+.auth-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-box input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+}
+
+.auth-box input:focus {
+  border-color: #111827;
+}
+
+.auth-box form > button {
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #111827;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-box form > button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-error {
+  padding: 10px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.switch-auth {
+  margin-top: 22px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.switch-button {
+  border: none;
+  background: none;
+  color: #111827;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logout-button {
+  margin-left: auto;
+  padding: 9px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #ef4444;
+  color: white;
+  cursor: pointer;
+}
+
+.header-info {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.header-info h1 {
+  margin: 0;
+}
+
+.header-info p {
+  margin: 3px 0 0;
+  font-size: 13px;
+  opacity: 0.7;
+}

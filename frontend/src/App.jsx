@@ -1,10 +1,87 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "./firebase";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [authBusy, setAuthBusy] = useState(false);
+
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  async function handleAuth(event) {
+    event.preventDefault();
+
+    if (!email.trim() || !password.trim()) {
+      setAuthError("Please enter your email and password.");
+      return;
+    }
+
+    setAuthError("");
+    setAuthBusy(true);
+
+    try {
+      if (isLogin) {
+        await signInWithEmailAndPassword(
+          auth,
+          email.trim(),
+          password
+        );
+      } else {
+        await createUserWithEmailAndPassword(
+          auth,
+          email.trim(),
+          password
+        );
+      }
+
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      console.error("Authentication error:", error);
+
+      if (error.code === "auth/invalid-credential") {
+        setAuthError("Incorrect email or password.");
+      } else if (error.code === "auth/email-already-in-use") {
+        setAuthError("This email is already registered.");
+      } else if (error.code === "auth/weak-password") {
+        setAuthError("Password must be at least 6 characters.");
+      } else if (error.code === "auth/invalid-email") {
+        setAuthError("Please enter a valid email address.");
+      } else {
+        setAuthError(error.message);
+      }
+    } finally {
+      setAuthBusy(false);
+    }
+  }
+
+  async function handleLogout() {
+    await signOut(auth);
+    setMessages([]);
+  }
 
   async function sendMessage() {
     if (!message.trim() || loading) return;
@@ -71,15 +148,92 @@ function App() {
     }
   }
 
+  if (authLoading) {
+    return (
+      <div className="auth-page">
+        <div className="auth-box">
+          <h1>INI</h1>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="auth-page">
+        <div className="auth-box">
+          <div className="auth-logo">INI</div>
+
+          <h1>{isLogin ? "Welcome back" : "Create your account"}</h1>
+
+          <p className="auth-subtitle">
+            {isLogin
+              ? "Sign in to continue to INI Bot"
+              : "Create an account to use INI Bot"}
+          </p>
+
+          <form onSubmit={handleAuth}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              autoComplete="email"
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete={isLogin ? "current-password" : "new-password"}
+            />
+
+            {authError && <div className="auth-error">{authError}</div>}
+
+            <button type="submit" disabled={authBusy}>
+              {authBusy
+                ? "Please wait..."
+                : isLogin
+                ? "Sign In"
+                : "Sign Up"}
+            </button>
+          </form>
+
+          <p className="switch-auth">
+            {isLogin
+              ? "Don't have an account?"
+              : "Already have an account?"}{" "}
+            <button
+              type="button"
+              className="switch-button"
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setAuthError("");
+              }}
+            >
+              {isLogin ? "Sign Up" : "Sign In"}
+            </button>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       <header className="header">
         <div className="logo">INI</div>
 
-        <div>
+        <div className="header-info">
           <h1>INI Bot</h1>
-          <p>Your AI assistant</p>
+          <p>{user.email}</p>
         </div>
+
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
       </header>
 
       <main className="chat">
