@@ -13,7 +13,10 @@ function App() {
 
     setMessages((prev) => [
       ...prev,
-      { role: "user", text: userMessage },
+      {
+        role: "user",
+        text: userMessage,
+      },
     ]);
 
     setMessage("");
@@ -41,10 +44,13 @@ function App() {
 
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", text: data.reply },
+        {
+          role: "assistant",
+          text: data.reply,
+        },
       ]);
     } catch (error) {
-      console.error(error);
+      console.error("Connection error:", error);
 
       setMessages((prev) => [
         ...prev,
