@@ -20,17 +20,18 @@ function App() {
     setLoading(true);
 
     try {
-const response = await fetch("https://ini-bot-backend.onrender.com/api/chat", {
-  
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      message: userMessage,
-    }),
-  }
-);
+      const response = await fetch(
+        "https://ini-bot-backend.onrender.com/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: userMessage,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -42,17 +43,16 @@ const response = await fetch("https://ini-bot-backend.onrender.com/api/chat", {
         ...prev,
         { role: "assistant", text: data.reply },
       ]);
-   } catch (error) {
-  console.error("INI BOT ERROR:", error);
+    } catch (error) {
+      console.error(error);
 
-  setMessages((prev) => [
-    ...prev,
-    {
-      role: "assistant",
-      text: `Connection error: ${error.message}`,
-    },
-  ]);
-}
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          text: "Sorry, I couldn't connect to INI Bot.",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
