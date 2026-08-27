@@ -8,7 +8,9 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://ini-bot-frontend.onrender.com",
+    origin: "https://ini-bot.onrender.com",
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
   })
 );
 app.use(express.json());
